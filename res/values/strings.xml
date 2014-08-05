@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Take a Break</string>
+    <string name="action_settings">About</string>
+    <string name="quote">It\'s always good to take a break.</string>
+    <string name="chronometer">Chronometer</string>
+    <string name="remind">Remind me in </string>
+    <string name="min">minutes. </string>
+    <string name="toggle">ToggleButton</string>
+    <string name="restart">RESTART</string>
+    <string name="imp">Why is it important to take breaks? Taking breaks allows you to relieve stress, remember ideas better, and be more efficient overall!
+        During this time, take a break from the computer and grab a drink, look out the window, anything but your screen.</string>
+    <string name="author">Created by Jeanie Lam</string>
+    
+    <string name="settings">Settings</string>
+	<string name="theme">Day/Night Theme</string>
+</resources>

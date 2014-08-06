@@ -1,10 +1,12 @@
 package com.example.takeabreak;
 
 import java.util.Random;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jeanielam.takeabreak.R;
 
@@ -127,7 +130,7 @@ public class MainActivity extends Activity {
 					if (newButton.isChecked()) {
 						if (!resume) {
 							// Situation where we are starting from 00:00
-							
+
 							chron.setBase(SystemClock.elapsedRealtime());
 							chron.start();
 						} else {
@@ -178,16 +181,19 @@ public class MainActivity extends Activity {
 
 			Context context = getActivity().getApplicationContext();
 
+			Intent resultIntent = new Intent(getActivity(), MainActivity.class);
+			PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 2, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
 			myNotification = new Notification.Builder(context)
 					.setContentTitle("Take a break!")
 					.setContentText("You deserve it!")
 					.setTicker("Take a break!")
-					.setDefaults(Notification.DEFAULT_ALL)
-					.setSmallIcon(R.drawable.notif_icon).build();
+					.setDefaults(Notification.DEFAULT_ALL).setContentIntent(resultPendingIntent)
+					.setSmallIcon(R.drawable.icon_teal).build();
 
 			notifManager = (NotificationManager) getActivity()
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-
+			
 			// Spinner to choose length before break
 
 			final Spinner chooseTime = (Spinner) rootView
@@ -202,6 +208,7 @@ public class MainActivity extends Activity {
 			chooseTime.setAdapter(adapter);
 
 			chooseTime.setOnItemSelectedListener(new OnItemSelectedListener() {
+
 				@Override
 				public void onItemSelected(AdapterView<?> parent, View view,
 						int position, long id) {
@@ -210,8 +217,8 @@ public class MainActivity extends Activity {
 
 					if (test.length() == 1) {
 						chronDisplayFormatted = "0" + test + ":00";
-					} else {
-						chronDisplayFormatted = test + ":00";
+					} else if (test.length() == 2) {
+						chronDisplayFormatted = test.concat(":00");
 					}
 
 				}
@@ -231,7 +238,6 @@ public class MainActivity extends Activity {
 					chronoText = chron.getText().toString();
 					if (chronoText.equals(chronDisplayFormatted)) {
 						chron.stop();
-						resume = true;
 						newButton.setChecked(false);
 
 						// send notification
@@ -246,20 +252,20 @@ public class MainActivity extends Activity {
 		}
 
 	}
-	
+
 	// Google Analytics
 	@Override
-	  public void onStart() {
-	    super.onStart();
-	   
-	    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
-	  }
+	public void onStart() {
+		super.onStart();
 
-	  @Override
-	  public void onStop() {
-	    super.onStop();
-	  
-	    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
-	  }
+		EasyTracker.getInstance(this).activityStart(this); // Add this method.
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+		EasyTracker.getInstance(this).activityStop(this); // Add this method.
+	}
 
 }

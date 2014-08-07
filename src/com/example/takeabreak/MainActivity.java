@@ -182,18 +182,21 @@ public class MainActivity extends Activity {
 			Context context = getActivity().getApplicationContext();
 
 			Intent resultIntent = new Intent(getActivity(), MainActivity.class);
-			PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 2, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			
+			PendingIntent resultPendingIntent = PendingIntent
+					.getActivity(context, 2, resultIntent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+
 			myNotification = new Notification.Builder(context)
 					.setContentTitle("Take a break!")
 					.setContentText("You deserve it!")
 					.setTicker("Take a break!")
-					.setDefaults(Notification.DEFAULT_ALL).setContentIntent(resultPendingIntent)
+					.setDefaults(Notification.DEFAULT_ALL)
+					.setContentIntent(resultPendingIntent).setAutoCancel(true)
 					.setSmallIcon(R.drawable.icon_teal).build();
 
 			notifManager = (NotificationManager) getActivity()
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			
+
 			// Spinner to choose length before break
 
 			final Spinner chooseTime = (Spinner) rootView
@@ -238,10 +241,17 @@ public class MainActivity extends Activity {
 					chronoText = chron.getText().toString();
 					if (chronoText.equals(chronDisplayFormatted)) {
 						chron.stop();
+
 						newButton.setChecked(false);
 
 						// send notification
 						notifManager.notify(2, myNotification);
+						chron.setText("00:00");
+						Toast.makeText(
+								getActivity().getApplicationContext(),
+								"You've worked for".concat(chronoText).concat(
+										"minutes! Take a break!"),
+								Toast.LENGTH_LONG).show();
 					}
 				}
 

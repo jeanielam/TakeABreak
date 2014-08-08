@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 	 */
 
 	// variables
-	
+
 	private static String[] myString;
 	private static final Random rgenerator = new Random();
 	static Notification myNotification;
@@ -153,14 +153,16 @@ public class MainActivity extends Activity {
 									+ (Integer.parseInt(test) * 60 * 1000),
 							pintent);
 					System.out.println("one time alarm is set");
-
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Notification set", Toast.LENGTH_LONG).show();
 				}
 			});
 
 			reoccuring.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
-					
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Notification set", Toast.LENGTH_LONG).show();
 					alarm.setRepeating(AlarmManager.RTC_WAKEUP,
 							System.currentTimeMillis(),
 							(Integer.parseInt(test) * 60 * 1000), pintent);
@@ -169,7 +171,7 @@ public class MainActivity extends Activity {
 			});
 			stop.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					Toast.makeText(getActivity().getApplicationContext(), "Notification cancelled", Toast.LENGTH_LONG).show();
 					alarm.cancel(pintent);
 				}
 			});

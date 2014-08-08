@@ -2,6 +2,7 @@ package com.jeanielam.takeabreak;
 
 import java.util.Random;
 
+import android.R.color;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -10,7 +11,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +28,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jeanielam.takeabreak.R;
 
@@ -77,6 +82,7 @@ public class MainActivity extends Activity {
 	static Notification myNotification;
 	static NotificationManager notifManager;
 	static String test;
+	static Vibrator myVib;
 
 	public static class PlaceholderFragment extends Fragment {
 
@@ -129,22 +135,31 @@ public class MainActivity extends Activity {
 				}
 
 			});
-			// toggle switches + listener
+			// toggle buttons + listener
 
 			final Button oneTime = (Button) rootView.findViewById(R.id.oneTime);
 			final Button reoccuring = (Button) rootView
 					.findViewById(R.id.reocurring);
 			final Button stop = (Button) rootView.findViewById(R.id.stopButton);
-
 			final AlarmManager alarm = (AlarmManager) getActivity()
 					.getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(getActivity(), AlarmReceiver.class);
 			final PendingIntent pintent = PendingIntent
 					.getBroadcast(getActivity(), 0, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
+			// set initial colour
+			stop.setTextColor(Color.RED);
+
+			// set vibration
+			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
 
 			oneTime.setOnClickListener(new OnClickListener() {
+
 				public void onClick(View v) {
+
+					oneTime.setTextColor(Color.RED);
+					reoccuring.setTextColor(Color.BLACK);
+					stop.setTextColor(Color.BLACK);
 
 					System.out.println("Length of alarm " + test + " minutes");
 					alarm.set(
@@ -155,24 +170,35 @@ public class MainActivity extends Activity {
 					System.out.println("one time alarm is set");
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
+
+					myVib.vibrate(50);
 				}
 			});
 
 			reoccuring.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
+					oneTime.setTextColor(Color.BLACK);
+					reoccuring.setTextColor(Color.RED);
+					stop.setTextColor(Color.BLACK);
+
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 					alarm.setRepeating(AlarmManager.RTC_WAKEUP,
 							System.currentTimeMillis(),
 							(Integer.parseInt(test) * 60 * 1000), pintent);
-
+					myVib.vibrate(50);
 				}
 			});
 			stop.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					Toast.makeText(getActivity().getApplicationContext(), "Notification cancelled", Toast.LENGTH_LONG).show();
+					oneTime.setTextColor(Color.BLACK);
+					reoccuring.setTextColor(Color.BLACK);
+					stop.setTextColor(Color.RED);
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Notification cancelled", Toast.LENGTH_LONG).show();
 					alarm.cancel(pintent);
+					myVib.vibrate(50);
 				}
 			});
 

@@ -42,18 +42,19 @@ public final class R {
         public static final int startbutton=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a000a;
-        public static final int author=0x7f0a0009;
-        public static final int button1=0x7f0a0007;
-        public static final int chronometer=0x7f0a0002;
+        public static final int action_settings=0x7f0a000b;
+        public static final int analogClock1=0x7f0a0008;
+        public static final int author=0x7f0a000a;
         public static final int container=0x7f0a0000;
-        public static final int info=0x7f0a0008;
+        public static final int info=0x7f0a0009;
+        public static final int oneTime=0x7f0a0007;
         public static final int quote=0x7f0a0001;
-        public static final int spinner1=0x7f0a0003;
-        public static final int textView1=0x7f0a0005;
-        public static final int textView2=0x7f0a0004;
-        public static final int toggleButton1=0x7f0a0006;
-        public static final int toggleTheme=0x7f0a000b;
+        public static final int reocurring=0x7f0a0006;
+        public static final int spinner1=0x7f0a0004;
+        public static final int stopButton=0x7f0a0005;
+        public static final int textView1=0x7f0a0003;
+        public static final int textView2=0x7f0a0002;
+        public static final int toggleTheme=0x7f0a000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -74,8 +75,8 @@ public final class R {
         public static final int min=0x7f040006;
         public static final int quote=0x7f040003;
         public static final int remind=0x7f040005;
-        public static final int restart=0x7f040008;
         public static final int settings=0x7f04000b;
+        public static final int stop=0x7f040008;
         public static final int theme=0x7f04000c;
         public static final int toggle=0x7f040007;
     }

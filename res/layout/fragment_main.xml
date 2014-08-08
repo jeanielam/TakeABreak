@@ -7,8 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    
-    tools:context="com.example.takeabreak.MainActivity$PlaceholderFragment" >
+    tools:context="com.jeanielam.takeabreak.MainActivity$PlaceholderFragment" >
 
     <TextView
         android:id="@+id/quote"
@@ -18,36 +17,7 @@
         android:text="@string/quote"
         android:textSize="20sp"
         android:textStyle="italic" >
-
-</TextView>
-    <Chronometer
-        android:id="@+id/chronometer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
-        android:gravity="center|top"
-        android:text="@string/chronometer"
-        android:textSize="100sp" />
-
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/chronometer"
-        android:layout_marginTop="36dp"
-        android:layout_toLeftOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView1" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/chronometer"
-        android:layout_alignTop="@+id/spinner1"
-        android:text="@string/remind"
-        android:textSize="25sp" />
+    </TextView>
 
     <TextView
         android:id="@+id/textView2"
@@ -59,26 +29,60 @@
         android:text="@string/min"
         android:textSize="25sp" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton1"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_below="@+id/spinner1"
-        android:layout_marginLeft="53dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="36dp"
-        android:text="@string/toggle" />
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_toRightOf="@+id/textView1" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/stopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinner1"
-        android:layout_alignTop="@+id/toggleButton1"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="53dp"
-        android:text="@string/restart"
-       />
+        android:layout_alignBottom="@+id/quote"
+        android:layout_alignLeft="@+id/quote"
+        android:layout_alignRight="@+id/reocurring"
+        android:layout_marginBottom="58dp"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/reocurring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/stopButton"
+        android:layout_alignLeft="@+id/quote"
+        android:layout_alignRight="@+id/oneTime"
+        android:text="Start reocurring notification" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/oneTime"
+        android:layout_alignLeft="@+id/quote"
+        android:layout_marginBottom="42dp"
+        android:text="@string/remind"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/oneTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/reocurring"
+        android:layout_alignLeft="@+id/quote"
+        android:layout_alignParentRight="true"
+        
+        android:text="Start one time notification" />
+
+    <AnalogClock
+        android:id="@+id/analogClock1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/spinner1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/quote" />
 
 </RelativeLayout>

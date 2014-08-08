@@ -8,7 +8,7 @@
     <string name="remind">Remind me in </string>
     <string name="min">minutes. </string>
     <string name="toggle">ToggleButton</string>
-    <string name="restart">RESTART</string>
+    <string name="stop">STOP</string>
     <string name="imp">Why is it important to take breaks? Taking breaks allows you to relieve stress, remember ideas better, and be more efficient overall!
         During this time, take a break from the computer and grab a drink, look out the window, anything but your screen.</string>
     <string name="author">Created by Jeanie Lam</string>

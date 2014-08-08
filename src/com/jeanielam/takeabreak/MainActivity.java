@@ -1,6 +1,5 @@
 package com.jeanielam.takeabreak;
 
-import java.util.Calendar;
 import java.util.Random;
 
 import android.app.Activity;
@@ -12,8 +11,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +21,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.Chronometer.OnChronometerTickListener;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jeanielam.takeabreak.R;
 

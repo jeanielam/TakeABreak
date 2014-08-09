@@ -1,7 +1,6 @@
 package com.jeanielam.takeabreak;
 
 import com.jeanielam.takeabreak.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +14,7 @@ public class AlarmNotif extends Service {
 	NotificationManager notifManager;
 	Notification myNotification;
 
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -24,14 +24,15 @@ public class AlarmNotif extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		displayNotif();
-
 	}
+
 
 	@Override
 	public void onDestroy() {
@@ -39,7 +40,6 @@ public class AlarmNotif extends Service {
 	}
 
 	private void displayNotif() {
-		// TODO Auto-generated method stub
 		
 		notifManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -58,6 +58,8 @@ public class AlarmNotif extends Service {
 
 		notifManager.notify(2, myNotification);
 		System.out.println("notification sent");
+		
+		
 	}
 
 }

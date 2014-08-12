@@ -1,10 +1,7 @@
 package com.jeanielam.takeabreak;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Random;
 
-import android.R.color;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -15,13 +12,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -39,6 +38,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -64,11 +64,6 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this, InfoActivity.class));
 			return true;
 		}
-		if (id == R.id.toggleTheme) {
-
-			Toast.makeText(getApplicationContext(), "Coming Soon!",
-					Toast.LENGTH_LONG).show();
-		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -87,6 +82,8 @@ public class MainActivity extends Activity {
 	static Vibrator myVib;
 
 	public static class PlaceholderFragment extends Fragment {
+
+		protected CountDownTimer countDownTimer;
 
 		public PlaceholderFragment() {
 		}
@@ -113,6 +110,9 @@ public class MainActivity extends Activity {
 			final Spinner chooseTime = (Spinner) rootView
 					.findViewById(R.id.spinner1);
 
+			final TextView countdown = (TextView) rootView
+					.findViewById(R.id.countdownText);
+
 			// per Android Dev tutorial:
 			ArrayAdapter<CharSequence> adapter = ArrayAdapter
 					.createFromResource(this.getActivity(),
@@ -128,6 +128,11 @@ public class MainActivity extends Activity {
 						int position, long id) {
 
 					test = parent.getItemAtPosition(position).toString();
+					if (test.length() == 1) {
+						countdown.setText("0" + test + ":00");
+					} else {
+						countdown.setText(test + ":00");
+					}
 
 				}
 
@@ -156,9 +161,18 @@ public class MainActivity extends Activity {
 			// set vibration
 			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
 
+			// animation for when countdown ends
+			final Animation anim = new AlphaAnimation(0.0f, 1.0f);
+			anim.setDuration(100);
+			anim.setStartOffset(20);
+			anim.setRepeatMode(Animation.REVERSE);
+			anim.setRepeatCount(10);
+
+			
 			oneTime.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
+					// default start colours
 					oneTime.setTextColor(Color.RED);
 					reoccuring.setTextColor(Color.BLACK);
 					stop.setTextColor(Color.BLACK);
@@ -166,6 +180,8 @@ public class MainActivity extends Activity {
 					System.out.println("Length of alarm " + test + " minutes");
 					System.out.println("Alarm set at "
 							+ System.currentTimeMillis());
+
+					// set AlarmManager
 					alarm.set(
 							AlarmManager.RTC_WAKEUP,
 							System.currentTimeMillis()
@@ -175,14 +191,55 @@ public class MainActivity extends Activity {
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 
+					
+					// countdown timer
+					long length = (long) (Integer.parseInt(test) * 60 * 1000);
+					long interval = (long) 1000;
+
+					countDownTimer = new CountDownTimer(length, interval) {
+						public void onTick(long millisLeft) {
+							countdown.setTextColor(Color.BLACK);
+							String minute = String.valueOf(millisLeft / 60000 % 60);
+
+							String sec = String.valueOf(millisLeft / 1000 % 60);
+
+							System.out.println("minute" + minute);
+							System.out.println("sec" + sec);
+							if (millisLeft / 1000 <= 60) {
+								countdown.setText("00:"
+										+ String.valueOf(millisLeft / 1000));
+								if (millisLeft / 1000 % 60 < 10) {
+									countdown.setText(minute + ":0" + sec);
+								}
+							} else {
+								countdown.setText(minute + ":" + sec);
+							}
+						}
+
+						@Override
+						public void onFinish() {
+							countdown.setText("00:00");
+							countdown.setTextColor(Color.RED);
+							countdown.startAnimation(anim);
+						}
+					};
+					countDownTimer.start();
+
+					// disable button
+					reoccuring.setEnabled(false);
+
+					// haptic feedback
 					myVib.vibrate(50);
+
+					// change colour of button text back when time is up
 					oneTime.postDelayed(new Runnable() {
 						@Override
 						public void run() {
 							oneTime.setTextColor(Color.BLACK);
 							stop.setTextColor(Color.RED);
+							reoccuring.setEnabled(true);
 						}
-					}, Integer.parseInt(test)*60*1000);
+					}, Integer.parseInt(test) * 60 * 1000);
 
 				}
 			});
@@ -190,16 +247,58 @@ public class MainActivity extends Activity {
 			reoccuring.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
+					// button colours
 					oneTime.setTextColor(Color.BLACK);
 					reoccuring.setTextColor(Color.RED);
 					stop.setTextColor(Color.BLACK);
 
+					// set alarm
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
 							System.currentTimeMillis(),
 							(Integer.parseInt(test) * 60 * 1000), pintent);
+
+					// haptic feedback
 					myVib.vibrate(50);
+
+					// button disable
+					oneTime.setEnabled(false);
+
+					// countdown Timer
+					long length = (long) (Integer.parseInt(test) * 60 * 1000);
+					long interval = (long) 1000;
+
+					countDownTimer = new CountDownTimer(length, interval) {
+						public void onTick(long millisLeft) {
+							countdown.setTextColor(Color.BLACK);
+							String minute = String.valueOf(millisLeft / 60000 % 60);
+
+							String sec = String.valueOf(millisLeft / 1000 % 60);
+
+							System.out.println("minute" + minute);
+							System.out.println("sec" + sec);
+							if (millisLeft / 1000 <= 60) {
+								countdown.setText("00:"
+										+ String.valueOf(millisLeft / 1000));
+								if (millisLeft / 1000 % 60 < 10) {
+									countdown.setText(minute + ":0" + sec);
+								}
+							} else {
+								countdown.setText(minute + ":" + sec);
+							}
+						}
+
+						@Override
+						public void onFinish() {
+							countdown.setText("00:00");
+							countdown.setTextColor(Color.RED);
+							countdown.startAnimation(anim);
+							countDownTimer.start();
+						}
+					};
+					countDownTimer.start();
+					
 				}
 			});
 			stop.setOnClickListener(new OnClickListener() {
@@ -213,13 +312,27 @@ public class MainActivity extends Activity {
 					AlarmManager am = (AlarmManager) getActivity()
 							.getSystemService(ALARM_SERVICE);
 
+					// button text colours
 					oneTime.setTextColor(Color.BLACK);
 					reoccuring.setTextColor(Color.BLACK);
 					stop.setTextColor(Color.RED);
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification cancelled", Toast.LENGTH_LONG).show();
+
+					// cancel Countdown Timer
+					countDownTimer.cancel();
+					countdown.startAnimation(anim);
+					countdown.setTextColor(Color.RED);
+
+					// re-enable buttons
+					reoccuring.setEnabled(true);
+					oneTime.setEnabled(true);
+
+					// cancel AlarmManager
 					am.cancel(sendStop);
 					sendStop.cancel();
+
+					// haptic feedback
 					myVib.vibrate(50);
 				}
 			});
@@ -235,6 +348,7 @@ public class MainActivity extends Activity {
 			// return View
 			return rootView;
 		}
+
 	}
 
 	// Google Analytics

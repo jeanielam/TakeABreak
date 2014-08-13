@@ -2,6 +2,7 @@ package com.jeanielam.takeabreak;
 
 import java.util.Random;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -10,7 +11,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -38,6 +42,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Action bar
+		final ActionBar actionBar = getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color
+				.parseColor("#0099CC")));
 
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState == null) {
@@ -168,7 +177,6 @@ public class MainActivity extends Activity {
 			anim.setRepeatMode(Animation.REVERSE);
 			anim.setRepeatCount(10);
 
-			
 			oneTime.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 
@@ -191,7 +199,6 @@ public class MainActivity extends Activity {
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 
-					
 					// countdown timer
 					long length = (long) (Integer.parseInt(test) * 60 * 1000);
 					long interval = (long) 1000;
@@ -199,7 +206,8 @@ public class MainActivity extends Activity {
 					countDownTimer = new CountDownTimer(length, interval) {
 						public void onTick(long millisLeft) {
 							countdown.setTextColor(Color.BLACK);
-							String minute = String.valueOf(millisLeft / 60000 % 60);
+							String minute = String
+									.valueOf(millisLeft / 60000 % 60);
 
 							String sec = String.valueOf(millisLeft / 1000 % 60);
 
@@ -272,7 +280,8 @@ public class MainActivity extends Activity {
 					countDownTimer = new CountDownTimer(length, interval) {
 						public void onTick(long millisLeft) {
 							countdown.setTextColor(Color.BLACK);
-							String minute = String.valueOf(millisLeft / 60000 % 60);
+							String minute = String
+									.valueOf(millisLeft / 60000 % 60);
 
 							String sec = String.valueOf(millisLeft / 1000 % 60);
 
@@ -298,7 +307,7 @@ public class MainActivity extends Activity {
 						}
 					};
 					countDownTimer.start();
-					
+
 				}
 			});
 			stop.setOnClickListener(new OnClickListener() {
@@ -348,7 +357,6 @@ public class MainActivity extends Activity {
 			// return View
 			return rootView;
 		}
-
 	}
 
 	// Google Analytics

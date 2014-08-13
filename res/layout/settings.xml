@@ -6,10 +6,7 @@
 
     <PreferenceCategory android:title="Themes" >
 
-        <ListPreference
-            android:entries="@array/setting"
-            android:key="Change Theme"
-            android:title="Change Theme" />
+       
     </PreferenceCategory>
 
 </PreferenceScreen>

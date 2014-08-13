@@ -4,7 +4,7 @@
     <string-array name="arrayQuotes">
         <item>It\'s always good to take a break!</item>
         <item>“Rest and be thankful.” ― William Wordsworth</item>
-        <item>“A change is as good as a rest.” ― Stephen King,</item>
+        <item>“A change is as good as a rest.” ― Stephen King</item>
         <item>"There is more to life than increasing its speed." - Mahatma Gandhi</item>
         <item>Stop for a moment. Take a break.</item>
         <item>"Your mind will answer most questions if you learn to relax and wait for the answer" - William Burroughs</item>
@@ -23,9 +23,6 @@
         <item>45</item>
         <item>60</item>
     </string-array>
-    <string-array name="setting">
-        <item>Holo Light</item>
-        <item>Holo Dark</item>
-    </string-array>
+    
 
 </resources>

@@ -13,8 +13,8 @@ public class AlarmNotif extends Service {
 
 	NotificationManager notifManager;
 	Notification myNotification;
+	Notification myNotification2;
 
-	
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -24,15 +24,15 @@ public class AlarmNotif extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
+
 		displayNotif();
 	}
-
 
 	@Override
 	public void onDestroy() {
@@ -40,26 +40,26 @@ public class AlarmNotif extends Service {
 	}
 
 	private void displayNotif() {
-		
+		int takeBreak = 1;
+
 		notifManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Intent newIntent = new Intent(this, MainActivity.class);
 
-		PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 2,
-				newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
+				takeBreak, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		myNotification = new Notification.Builder(this)
 				.setContentTitle("Take a break!")
 				.setContentText("You deserve it!").setTicker("Take a break!")
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setContentIntent(resultPendingIntent).setAutoCancel(true)
-				.setSmallIcon(R.drawable.icon_teal).build();
+				.setSmallIcon(R.drawable.notification_icon).build();
 
-		notifManager.notify(2, myNotification);
+		notifManager.notify(1, myNotification);
 		System.out.println("notification sent");
-		
-		
+
 	}
 
 }

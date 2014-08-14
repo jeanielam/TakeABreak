@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.os.WorkSource;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -89,10 +90,14 @@ public class MainActivity extends Activity {
 	static NotificationManager notifManager;
 	static String test;
 	static Vibrator myVib;
+	static String breakLength;
+	public boolean isBreak;
 
 	public static class PlaceholderFragment extends Fragment {
 
 		protected CountDownTimer countDownTimer;
+		protected CountDownTimer countDownTimer1;
+		protected long workBreak;
 
 		public PlaceholderFragment() {
 		}
@@ -114,7 +119,14 @@ public class MainActivity extends Activity {
 
 			tv.setText(q);
 
+		
+			
 			// Spinner to choose length before break
+
+			final TextView minuteText = (TextView) rootView
+					.findViewById(R.id.textView2);
+			final TextView minuteTextBreak = (TextView) rootView
+					.findViewById(R.id.TextView01);
 
 			final Spinner chooseTime = (Spinner) rootView
 					.findViewById(R.id.spinner1);
@@ -137,6 +149,11 @@ public class MainActivity extends Activity {
 						int position, long id) {
 
 					test = parent.getItemAtPosition(position).toString();
+					if (test.equals("1")) {
+						minuteText.setText("minute");
+					} else {
+						minuteText.setText("minutes");
+					}
 					if (test.length() == 1) {
 						countdown.setText("0" + test + ":00");
 					} else {
@@ -151,6 +168,46 @@ public class MainActivity extends Activity {
 				}
 
 			});
+
+			// Spinner to choose length of break
+			final Spinner breakTime = (Spinner) rootView
+					.findViewById(R.id.Spinner01);
+			final TextView breakCountdown = (TextView) rootView.findViewById(R.id.breakCountdown);
+			breakCountdown.setTextColor(Color.parseColor("#0099CC"));
+			// per Android Dev tutorial:
+			ArrayAdapter<CharSequence> adapter1 = ArrayAdapter
+					.createFromResource(this.getActivity(),
+							R.array.breakTimeChoices,
+							android.R.layout.simple_spinner_item);
+			adapter1.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+			breakTime.setAdapter(adapter1);
+
+			breakTime.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view,
+						int position, long id) {
+
+					breakLength = parent.getItemAtPosition(position).toString();
+					if (breakLength.equals("1")) {
+						minuteTextBreak.setText("minute");
+					} else {
+						minuteTextBreak.setText("minutes");
+					}
+					if (breakLength.length() == 1) {
+						breakCountdown.setText("+ 0" + breakLength + ":00");
+					} else {
+						breakCountdown.setText("+ " + breakLength + ":00");
+					}
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> parent) {
+
+				}
+
+			});
+
 			// toggle buttons + listener
 
 			final Button oneTime = (Button) rootView.findViewById(R.id.oneTime);
@@ -160,13 +217,24 @@ public class MainActivity extends Activity {
 			final AlarmManager alarm = (AlarmManager) getActivity()
 					.getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+
 			final PendingIntent pintent = PendingIntent
-					.getBroadcast(getActivity(), 0, intent,
+					.getBroadcast(getActivity(), 1, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
 
+			final PendingIntent pintent2 = PendingIntent
+					.getBroadcast(getActivity(), 2, intent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+			final PendingIntent pintent3 = PendingIntent
+					.getBroadcast(getActivity(), 3, intent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+			
 			// set initial colour
 			stop.setTextColor(Color.RED);
-
+			
+			// disable stop button on create
+			stop.setEnabled(false);
+			
 			// set vibration
 			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
 
@@ -178,6 +246,8 @@ public class MainActivity extends Activity {
 			anim.setRepeatCount(10);
 
 			oneTime.setOnClickListener(new OnClickListener() {
+				
+
 				public void onClick(View v) {
 
 					// default start colours
@@ -189,19 +259,24 @@ public class MainActivity extends Activity {
 					System.out.println("Alarm set at "
 							+ System.currentTimeMillis());
 
+					long trigger = System.currentTimeMillis()
+							+ (Integer.parseInt(test) * 60 * 1000);
+
 					// set AlarmManager
-					alarm.set(
-							AlarmManager.RTC_WAKEUP,
-							System.currentTimeMillis()
-									+ (Integer.parseInt(test) * 60 * 1000),
-							pintent);
+					long length = (long) (Integer.parseInt(test) * 60 * 1000);
+					final long interval = (long) 1000;
+					final long breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
+					workBreak = length + breakLeng;
+
+					alarm.set(AlarmManager.RTC_WAKEUP, trigger, pintent);
+
+					alarm.set(AlarmManager.RTC_WAKEUP, trigger + breakLeng,
+							pintent2);
 					System.out.println("one time alarm is set");
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 
 					// countdown timer
-					long length = (long) (Integer.parseInt(test) * 60 * 1000);
-					long interval = (long) 1000;
 
 					countDownTimer = new CountDownTimer(length, interval) {
 						public void onTick(long millisLeft) {
@@ -211,8 +286,6 @@ public class MainActivity extends Activity {
 
 							String sec = String.valueOf(millisLeft / 1000 % 60);
 
-							System.out.println("minute" + minute);
-							System.out.println("sec" + sec);
 							if (millisLeft / 1000 <= 60) {
 								countdown.setText("00:"
 										+ String.valueOf(millisLeft / 1000));
@@ -227,27 +300,60 @@ public class MainActivity extends Activity {
 						@Override
 						public void onFinish() {
 							countdown.setText("00:00");
-							countdown.setTextColor(Color.RED);
+							countdown.setTextColor(Color.parseColor("#CC0000"));
 							countdown.startAnimation(anim);
+
 						}
 					};
 					countDownTimer.start();
 
+				
 					// disable button
 					reoccuring.setEnabled(false);
+					stop.setEnabled(true);
 
 					// haptic feedback
 					myVib.vibrate(50);
 
 					// change colour of button text back when time is up
 					oneTime.postDelayed(new Runnable() {
+						
+
 						@Override
 						public void run() {
 							oneTime.setTextColor(Color.BLACK);
 							stop.setTextColor(Color.RED);
 							reoccuring.setEnabled(true);
+
+							// break countdown
+							countDownTimer1 = new CountDownTimer(breakLeng, interval){
+								public void onTick(long millis){
+									String minute = String
+											.valueOf(millis / 60000 % 60);
+									
+									String sec = String.valueOf(millis / 1000 % 60);
+
+									if (millis / 1000 <= 60) {
+										breakCountdown.setText("+ 00:"
+												+ String.valueOf(millis / 1000));
+										if (millis / 1000 % 60 < 10) {
+											breakCountdown.setText("+ " + minute + ":0" + sec);
+										}
+									} else {
+										breakCountdown.setText("+ " + minute + ":" + sec);
+									}
+								}
+								@Override
+								public void onFinish(){
+									breakCountdown.setText("+ 00:00");
+									breakCountdown.setTextColor(Color.parseColor("#FF4444"));
+									breakCountdown.startAnimation(anim);
+								}
+							
+						};
+						countDownTimer1.start();
 						}
-					}, Integer.parseInt(test) * 60 * 1000);
+					}, length);
 
 				}
 			});
@@ -263,16 +369,33 @@ public class MainActivity extends Activity {
 					// set alarm
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
-					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-							System.currentTimeMillis(),
-							(Integer.parseInt(test) * 60 * 1000), pintent);
+					
+					long trigger = System.currentTimeMillis()
+							+ (Integer.parseInt(test) * 60 * 1000);
 
+					// set AlarmManager
+					long workLength = (long) (Integer.parseInt(test) * 60 * 1000);
+
+					long breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
+					workBreak = workLength + breakLeng;
+
+					
+					//work inital
+					alarm.set(AlarmManager.RTC_WAKEUP, trigger, pintent);
+					//work recurring
+					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), workBreak + workLength, pintent3);
+					System.out.println("work recurring"+ (workLength+workBreak));
+					// break
+					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),workBreak , pintent2);
+					System.out.println("break times" + ((workLength+workBreak)*2));
+										
 					// haptic feedback
 					myVib.vibrate(50);
 
 					// button disable
 					oneTime.setEnabled(false);
-
+					stop.setEnabled(true);
+					
 					// countdown Timer
 					long length = (long) (Integer.parseInt(test) * 60 * 1000);
 					long interval = (long) 1000;
@@ -285,8 +408,6 @@ public class MainActivity extends Activity {
 
 							String sec = String.valueOf(millisLeft / 1000 % 60);
 
-							System.out.println("minute" + minute);
-							System.out.println("sec" + sec);
 							if (millisLeft / 1000 <= 60) {
 								countdown.setText("00:"
 										+ String.valueOf(millisLeft / 1000));
@@ -301,12 +422,43 @@ public class MainActivity extends Activity {
 						@Override
 						public void onFinish() {
 							countdown.setText("00:00");
-							countdown.setTextColor(Color.RED);
+							countdown.setTextColor(Color.parseColor("#CC0000"));
 							countdown.startAnimation(anim);
-							countDownTimer.start();
+							countDownTimer1.start();
 						}
 					};
 					countDownTimer.start();
+					
+					// break countdown
+					
+					countDownTimer1 = new CountDownTimer(breakLeng, interval){
+						
+						public void onTick(long millis){
+							String minute = String
+									.valueOf(millis / 60000 % 60);
+							
+							String sec = String.valueOf(millis / 1000 % 60);
+
+							if (millis / 1000 <= 60) {
+								breakCountdown.setText("+ 00:"
+										+ String.valueOf(millis / 1000));
+								if (millis / 1000 % 60 < 10) {
+									breakCountdown.setText("+ " + minute + ":0" + sec);
+								}
+							} else {
+								breakCountdown.setText("+ " + minute + ":" + sec);
+							}
+						}
+						@Override
+						public void onFinish(){
+							breakCountdown.setText("+ 00:00");
+							breakCountdown.setTextColor(Color.parseColor("#FF4444"));
+							breakCountdown.startAnimation(anim);
+							countDownTimer.start();
+						}
+					
+				};
+				
 
 				}
 			});
@@ -316,7 +468,13 @@ public class MainActivity extends Activity {
 					Intent intent = new Intent(getActivity(),
 							AlarmReceiver.class);
 					PendingIntent sendStop = PendingIntent.getBroadcast(
-							getActivity(), 0, intent,
+							getActivity(), 1, intent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent sendStop2 = PendingIntent.getBroadcast(
+							getActivity(), 2, intent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent sendStop3 = PendingIntent.getBroadcast(
+							getActivity(), 3, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
 					AlarmManager am = (AlarmManager) getActivity()
 							.getSystemService(ALARM_SERVICE);
@@ -331,28 +489,29 @@ public class MainActivity extends Activity {
 					// cancel Countdown Timer
 					countDownTimer.cancel();
 					countdown.startAnimation(anim);
-					countdown.setTextColor(Color.RED);
+					countdown.setTextColor(Color.parseColor("CC0000"));
 
+					countDownTimer1.cancel();
+					breakCountdown.startAnimation(anim);
+					breakCountdown.setTextColor(Color.parseColor("CC0000"));
 					// re-enable buttons
 					reoccuring.setEnabled(true);
 					oneTime.setEnabled(true);
 
 					// cancel AlarmManager
 					am.cancel(sendStop);
-					sendStop.cancel();
+					am.cancel(sendStop2);
+					am.cancel(sendStop3);
 
+					sendStop.cancel();
+					sendStop2.cancel();
+					sendStop3.cancel();
 					// haptic feedback
 					myVib.vibrate(50);
 				}
 			});
 
-			// TextView "Remind me in"
-
-			rootView.findViewById(R.id.textView1);
-
-			// TextView "minutes."
-
-			rootView.findViewById(R.id.textView2);
+			
 
 			// return View
 			return rootView;

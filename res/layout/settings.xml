@@ -4,8 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <PreferenceCategory android:title="Themes" >
-
+    <PreferenceCategory android:title="Themes" 
+        android:key="Themes">
+		<ListPreference
+		    android:key="action_bar_colour"
+		    android:title="Action Bar Colour"
+		    android:defaultValue="Light Blue"
+		    android:entries="@array/colours"
+		    android:entryValues="@array/colours_hex"
+		    >
+		    
+		</ListPreference>
        
     </PreferenceCategory>
 

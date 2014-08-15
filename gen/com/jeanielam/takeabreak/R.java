@@ -11,6 +11,8 @@ public final class R {
     public static final class array {
         public static final int arrayQuotes=0x7f060000;
         public static final int breakTimeChoices=0x7f060002;
+        public static final int colours=0x7f060003;
+        public static final int colours_hex=0x7f060004;
         public static final int timeChoices=0x7f060001;
     }
     public static final class attr {
@@ -54,6 +56,7 @@ public final class R {
         public static final int oneTime=0x7f0a0007;
         public static final int quote=0x7f0a0001;
         public static final int reocurring=0x7f0a0006;
+        public static final int settings=0x7f0a0010;
         public static final int spinner1=0x7f0a0004;
         public static final int stopButton=0x7f0a0005;
         public static final int textView1=0x7f0a0003;

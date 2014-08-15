@@ -16,7 +16,7 @@ public class InfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info);
 		// Action bar
-		 final ActionBar actionBar = getActionBar(); 
+		final ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		TextView info = (TextView)findViewById(R.id.info);
 		TextView author = (TextView)findViewById(R.id.author);

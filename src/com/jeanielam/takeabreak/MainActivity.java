@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.os.WorkSource;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +55,7 @@ public class MainActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-
+		PreferenceManager.setDefaultValues(this, R.layout.settings, false);
 	}
 
 	@Override
@@ -74,6 +75,10 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this, InfoActivity.class));
 			return true;
 		}
+	/*	if (id == R.id.settings) {
+			startActivity(new Intent(this, AppSettingsActivity.class));
+			return true;
+		}*/
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -119,8 +124,6 @@ public class MainActivity extends Activity {
 
 			tv.setText(q);
 
-		
-			
 			// Spinner to choose length before break
 
 			final TextView minuteText = (TextView) rootView
@@ -172,7 +175,8 @@ public class MainActivity extends Activity {
 			// Spinner to choose length of break
 			final Spinner breakTime = (Spinner) rootView
 					.findViewById(R.id.Spinner01);
-			final TextView breakCountdown = (TextView) rootView.findViewById(R.id.breakCountdown);
+			final TextView breakCountdown = (TextView) rootView
+					.findViewById(R.id.breakCountdown);
 			breakCountdown.setTextColor(Color.parseColor("#0099CC"));
 			// per Android Dev tutorial:
 			ArrayAdapter<CharSequence> adapter1 = ArrayAdapter
@@ -228,13 +232,13 @@ public class MainActivity extends Activity {
 			final PendingIntent pintent3 = PendingIntent
 					.getBroadcast(getActivity(), 3, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
-			
+
 			// set initial colour
 			stop.setTextColor(Color.RED);
-			
+
 			// disable stop button on create
 			stop.setEnabled(false);
-			
+
 			// set vibration
 			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
 
@@ -246,7 +250,6 @@ public class MainActivity extends Activity {
 			anim.setRepeatCount(10);
 
 			oneTime.setOnClickListener(new OnClickListener() {
-				
 
 				public void onClick(View v) {
 
@@ -254,7 +257,8 @@ public class MainActivity extends Activity {
 					oneTime.setTextColor(Color.RED);
 					reoccuring.setTextColor(Color.BLACK);
 					stop.setTextColor(Color.BLACK);
-
+					breakCountdown.setTextColor(Color.parseColor("#0099CC"));
+					countdown.setTextColor(Color.BLACK);
 					System.out.println("Length of alarm " + test + " minutes");
 					System.out.println("Alarm set at "
 							+ System.currentTimeMillis());
@@ -265,7 +269,8 @@ public class MainActivity extends Activity {
 					// set AlarmManager
 					long length = (long) (Integer.parseInt(test) * 60 * 1000);
 					final long interval = (long) 1000;
-					final long breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
+					final long breakLeng = (long) (Integer
+							.parseInt(breakLength) * 60 * 1000);
 					workBreak = length + breakLeng;
 
 					alarm.set(AlarmManager.RTC_WAKEUP, trigger, pintent);
@@ -302,12 +307,45 @@ public class MainActivity extends Activity {
 							countdown.setText("00:00");
 							countdown.setTextColor(Color.parseColor("#CC0000"));
 							countdown.startAnimation(anim);
-
+							countDownTimer1.start();
 						}
 					};
 					countDownTimer.start();
 
-				
+					// break countdown
+					countDownTimer1 = new CountDownTimer(breakLeng,
+							interval) {
+						public void onTick(long millis) {
+							
+							String minute = String
+									.valueOf(millis / 60000 % 60);
+
+							String sec = String
+									.valueOf(millis / 1000 % 60);
+
+							if (millis / 1000 <= 60) {
+								breakCountdown.setText("+ 00:"
+										+ String.valueOf(millis / 1000));
+								if (millis / 1000 % 60 < 10) {
+									breakCountdown.setText("+ "
+											+ minute + ":0" + sec);
+								} else {
+									breakCountdown.setText("+ "
+											+ minute + ":" + sec);
+								}
+							}
+						}
+
+						@Override
+						public void onFinish() {
+							breakCountdown.setText("+ 00:00");
+							breakCountdown.setTextColor(Color
+									.parseColor("#FF4444"));
+							breakCountdown.startAnimation(anim);
+						}
+
+					};
+					
 					// disable button
 					reoccuring.setEnabled(false);
 					stop.setEnabled(true);
@@ -317,46 +355,16 @@ public class MainActivity extends Activity {
 
 					// change colour of button text back when time is up
 					oneTime.postDelayed(new Runnable() {
-						
-
 						@Override
 						public void run() {
 							oneTime.setTextColor(Color.BLACK);
 							stop.setTextColor(Color.RED);
 							reoccuring.setEnabled(true);
-
-							// break countdown
-							countDownTimer1 = new CountDownTimer(breakLeng, interval){
-								public void onTick(long millis){
-									String minute = String
-											.valueOf(millis / 60000 % 60);
-									
-									String sec = String.valueOf(millis / 1000 % 60);
-
-									if (millis / 1000 <= 60) {
-										breakCountdown.setText("+ 00:"
-												+ String.valueOf(millis / 1000));
-										if (millis / 1000 % 60 < 10) {
-											breakCountdown.setText("+ " + minute + ":0" + sec);
-										}
-									} else {
-										breakCountdown.setText("+ " + minute + ":" + sec);
-									}
-								}
-								@Override
-								public void onFinish(){
-									breakCountdown.setText("+ 00:00");
-									breakCountdown.setTextColor(Color.parseColor("#FF4444"));
-									breakCountdown.startAnimation(anim);
-								}
-							
-						};
-						countDownTimer1.start();
 						}
-					}, length);
-
-				}
-			});
+					}, workBreak);
+				
+					
+				}});
 
 			reoccuring.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -369,7 +377,7 @@ public class MainActivity extends Activity {
 					// set alarm
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
-					
+
 					long trigger = System.currentTimeMillis()
 							+ (Integer.parseInt(test) * 60 * 1000);
 
@@ -379,23 +387,27 @@ public class MainActivity extends Activity {
 					long breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
 					workBreak = workLength + breakLeng;
 
-					
-					//work inital
+					// work inital
 					alarm.set(AlarmManager.RTC_WAKEUP, trigger, pintent);
-					//work recurring
-					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), workBreak + workLength, pintent3);
-					System.out.println("work recurring"+ (workLength+workBreak));
+					// work recurring
+					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+							System.currentTimeMillis(), workBreak + workLength,
+							pintent3);
+					System.out.println("work recurring"
+							+ (workLength + workBreak));
 					// break
-					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),workBreak , pintent2);
-					System.out.println("break times" + ((workLength+workBreak)*2));
-										
+					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+							System.currentTimeMillis(), workBreak, pintent2);
+					System.out.println("break times"
+							+ ((workLength + workBreak) * 2));
+
 					// haptic feedback
 					myVib.vibrate(50);
 
 					// button disable
 					oneTime.setEnabled(false);
 					stop.setEnabled(true);
-					
+
 					// countdown Timer
 					long length = (long) (Integer.parseInt(test) * 60 * 1000);
 					long interval = (long) 1000;
@@ -428,37 +440,39 @@ public class MainActivity extends Activity {
 						}
 					};
 					countDownTimer.start();
-					
+
 					// break countdown
-					
-					countDownTimer1 = new CountDownTimer(breakLeng, interval){
-						
-						public void onTick(long millis){
-							String minute = String
-									.valueOf(millis / 60000 % 60);
-							
+
+					countDownTimer1 = new CountDownTimer(breakLeng, interval) {
+
+						public void onTick(long millis) {
+							String minute = String.valueOf(millis / 60000 % 60);
+
 							String sec = String.valueOf(millis / 1000 % 60);
 
 							if (millis / 1000 <= 60) {
 								breakCountdown.setText("+ 00:"
 										+ String.valueOf(millis / 1000));
 								if (millis / 1000 % 60 < 10) {
-									breakCountdown.setText("+ " + minute + ":0" + sec);
+									breakCountdown.setText("+ " + minute + ":0"
+											+ sec);
 								}
 							} else {
-								breakCountdown.setText("+ " + minute + ":" + sec);
+								breakCountdown.setText("+ " + minute + ":"
+										+ sec);
 							}
 						}
+
 						@Override
-						public void onFinish(){
+						public void onFinish() {
 							breakCountdown.setText("+ 00:00");
-							breakCountdown.setTextColor(Color.parseColor("#FF4444"));
+							breakCountdown.setTextColor(Color
+									.parseColor("#FF4444"));
 							breakCountdown.startAnimation(anim);
 							countDownTimer.start();
 						}
-					
-				};
-				
+
+					};
 
 				}
 			});
@@ -489,11 +503,11 @@ public class MainActivity extends Activity {
 					// cancel Countdown Timer
 					countDownTimer.cancel();
 					countdown.startAnimation(anim);
-					countdown.setTextColor(Color.parseColor("CC0000"));
+					countdown.setTextColor(Color.RED);
 
 					countDownTimer1.cancel();
 					breakCountdown.startAnimation(anim);
-					breakCountdown.setTextColor(Color.parseColor("CC0000"));
+					breakCountdown.setTextColor(Color.RED);
 					// re-enable buttons
 					reoccuring.setEnabled(true);
 					oneTime.setEnabled(true);
@@ -510,8 +524,6 @@ public class MainActivity extends Activity {
 					myVib.vibrate(50);
 				}
 			});
-
-			
 
 			// return View
 			return rootView;

@@ -34,5 +34,33 @@
         <item>20</item>
         <item>30</item>
     </string-array>
+    <string-array name ="colours">
+        <item name = "Light Blue">Light Blue</item>
+        <item name = "Dark Blue">Dark Blue</item>
+        <item name = "Light Purple">Light Purple</item>
+        <item name = "Dark Purple">Dark Purple</item>
+        <item name = "Light Green">Light Green</item>
+        <item name = "Dark Green">Dark Green</item>
+        <item name = "Light Orange">Light Orange</item>
+        <item name = "Dark Orange">Dark Orange</item>
+        <item name = "Light Red">Light Red</item>
+        <item name = "Dark Red">Dark Red</item>
+        <item name = "Black">Black</item>
+        <item name = "White">White</item>
+    </string-array>
+     <string-array name ="colours_hex">
+       <item name = "Light Blue">#33B5E5</item>
+        <item name = "Dark Blue">#0099CC</item>
+        <item name = "Light Purple">#AA66CC</item>
+        <item name = "Dark Purple">#9933CC</item>
+        <item name = "Light Green">#99CC00</item>
+        <item name = "Dark Green">#669900</item>
+        <item name = "Light Orange">#FFBB33</item>
+        <item name = "Dark Orange">#FF8800</item>
+        <item name = "Light Red">#FF4444</item>
+        <item name = "Dark Red">#CC0000</item>
+        <item name = "Black">#000000</item>
+        <item name = "White">#FFFFFF</item>
+    </string-array>
 
 </resources>

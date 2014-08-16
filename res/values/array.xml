@@ -62,5 +62,13 @@
         <item name = "Black">#000000</item>
         <item name = "White">#FFFFFF</item>
     </string-array>
+    <string-array name = "theme">
+        <item name = "Holo Light">Holo Light</item>
+        <item name = "Holo">Holo</item>
+    </string-array>
+    <string-array name = "theme_id">
+        <item name = "Holo Light">1</item>
+        <item name = "Holo">2</item>
+    </string-array>
 
 </resources>

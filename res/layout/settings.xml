@@ -4,18 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <PreferenceCategory android:title="Themes" 
-        android:key="Themes">
+    <PreferenceCategory
+        android:key="Themes"
+        android:title="Themes" >
 		<ListPreference
-		    android:key="action_bar_colour"
-		    android:title="Action Bar Colour"
-		    android:defaultValue="Light Blue"
-		    android:entries="@array/colours"
-		    android:entryValues="@array/colours_hex"
-		    >
-		    
-		</ListPreference>
-       
+		    android:defaultValue="Holo Light"
+		    android:entries="@array/theme"
+		    android:entryValues="@array/theme_id"
+		    android:key="theme"
+		    android:summary="Change theme of application"
+		    android:title="Application Theme"
+		    ></ListPreference>
+        <ListPreference
+            android:defaultValue="Light Blue"
+            android:entries="@array/colours"
+            android:entryValues="@array/colours_hex"
+            android:key="action_bar_colour"
+            android:summary="WARNING: Application will be restarted to apply changes"
+            android:title="Action Bar Colour" >
+        </ListPreference>
     </PreferenceCategory>
 
 </PreferenceScreen>

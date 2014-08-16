@@ -8,9 +8,9 @@
         <item>"There is more to life than increasing its speed." - Mahatma Gandhi</item>
         <item>Stop for a moment. Take a break.</item>
         <item>"Your mind will answer most questions if you learn to relax and wait for the answer" - William Burroughs</item>
-    	<item>"Your calm mind is the ultimate weapon against your challenges. So relax" - Bryant McGill </item>
-    	<item>"For fast-acting relief, try slowing down." - Lily Tomlin</item>
-    	<item>"Slow down and everything you are chasing will come around and catch you." - John De Paola</item>
+        <item>"Your calm mind is the ultimate weapon against your challenges. So relax" - Bryant McGill </item>
+        <item>"For fast-acting relief, try slowing down." - Lily Tomlin</item>
+        <item>"Slow down and everything you are chasing will come around and catch you." - John De Paola</item>
     </string-array>
     <string-array name="timeChoices">
         <item>1</item>
@@ -23,7 +23,7 @@
         <item>45</item>
         <item>60</item>
     </string-array>
-     <string-array name="breakTimeChoices">
+    <string-array name="breakTimeChoices">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -34,41 +34,49 @@
         <item>20</item>
         <item>30</item>
     </string-array>
-    <string-array name ="colours">
-        <item name = "Light Blue">Light Blue</item>
-        <item name = "Dark Blue">Dark Blue</item>
-        <item name = "Light Purple">Light Purple</item>
-        <item name = "Dark Purple">Dark Purple</item>
-        <item name = "Light Green">Light Green</item>
-        <item name = "Dark Green">Dark Green</item>
-        <item name = "Light Orange">Light Orange</item>
-        <item name = "Dark Orange">Dark Orange</item>
-        <item name = "Light Red">Light Red</item>
-        <item name = "Dark Red">Dark Red</item>
-        <item name = "Black">Black</item>
-        <item name = "White">White</item>
+    <string-array name="colours">
+        <item name="Light Blue">Light Blue</item>
+        <item name="Dark Blue">Dark Blue</item>
+        <item name="Light Purple">Light Purple</item>
+        <item name="Dark Purple">Dark Purple</item>
+        <item name="Light Green">Light Green</item>
+        <item name="Dark Green">Dark Green</item>
+        <item name="Light Orange">Light Orange</item>
+        <item name="Dark Orange">Dark Orange</item>
+        <item name="Light Red">Light Red</item>
+        <item name="Dark Red">Dark Red</item>
+        <item name="Black">Black</item>
     </string-array>
-     <string-array name ="colours_hex">
-       <item name = "Light Blue">#33B5E5</item>
-        <item name = "Dark Blue">#0099CC</item>
-        <item name = "Light Purple">#AA66CC</item>
-        <item name = "Dark Purple">#9933CC</item>
-        <item name = "Light Green">#99CC00</item>
-        <item name = "Dark Green">#669900</item>
-        <item name = "Light Orange">#FFBB33</item>
-        <item name = "Dark Orange">#FF8800</item>
-        <item name = "Light Red">#FF4444</item>
-        <item name = "Dark Red">#CC0000</item>
-        <item name = "Black">#000000</item>
-        <item name = "White">#FFFFFF</item>
+    <string-array name="colours_hex">
+        <item name="Light Blue">#33B5E5</item>
+        <item name="Dark Blue">#0099CC</item>
+        <item name="Light Purple">#AA66CC</item>
+        <item name="Dark Purple">#9933CC</item>
+        <item name="Light Green">#99CC00</item>
+        <item name="Dark Green">#669900</item>
+        <item name="Light Orange">#FFBB33</item>
+        <item name="Dark Orange">#FF8800</item>
+        <item name="Light Red">#FF4444</item>
+        <item name="Dark Red">#CC0000</item>
+        <item name="Black">#000000</item>
     </string-array>
-    <string-array name = "theme">
-        <item name = "Holo Light">Holo Light</item>
-        <item name = "Holo">Holo</item>
+    <string-array name="bg_colours">
+        <item name="Pastel Blue">Pastel Blue</item>
+        <item name="Pastel Magenta">Pastel Magenta</item>
+        <item name="Pastel Purple">Pastel Purple</item>
+        <item name="Pastel Pink">Pastel Pink</item>
+        <item name="Pastel Green">Pastel Green</item>
+        <item name="Pastel Gray">Pastel Gray</item>
+        <item name="White">White</item>
     </string-array>
-    <string-array name = "theme_id">
-        <item name = "Holo Light">1</item>
-        <item name = "Holo">2</item>
+    <string-array name="bg_colours_hex">
+        <item name="Pastel Blue">#AEC6CF</item>
+        <item name="Pastel Magenta">#F49AC2</item>
+        <item name="Pastel Purple">#B19CD9</item>
+        <item name="Pastel Pink">#DEA5A4</item>
+        <item name="Pastel Green">#C4DF9B</item>
+        <item name="Pastel Gray">#CFCFC4</item>
+        <item name="White">#FFFFFF</item>
     </string-array>
 
 </resources>

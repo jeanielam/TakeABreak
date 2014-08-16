@@ -12,16 +12,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.os.WorkSource;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,7 +39,7 @@ import com.jeanielam.takeabreak.R;
 
 public class MainActivity extends Activity {
 	static SharedPreferences sp;
-	ActionBar actionBar;
+	static boolean haptic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +53,28 @@ public class MainActivity extends Activity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
-		actionBar = getActionBar();
+
 		loadPreferences();
 
 	}
 
 	public void loadPreferences() {
-		// TODO Auto-generated method stub
 
-		String appTheme = sp.getString("theme", "");
-		if (appTheme.equals("1")) {
-			setTheme(android.R.style.Theme_Holo_Light);
-		} else if (appTheme.equals("2")) {
-			setTheme(android.R.style.Theme_Holo);
-		}
+		String actionBarColourHex = sp.getString("action_bar_colour", "");
+		// Action bar
+		final ActionBar actionBar = getActionBar();
+
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color
+				.parseColor(actionBarColourHex)));
+
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(true);
+
+		String bgColourHex = sp.getString("bg_colour", "White");
+		getWindow().getDecorView().setBackgroundColor(
+				Color.parseColor(bgColourHex));
+
+		haptic = sp.getBoolean("haptic_pref", false);
 
 	}
 
@@ -98,11 +101,11 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this, InfoActivity.class));
 			return true;
 		}
-		/*if (id == R.id.settings) {
+		if (id == R.id.settings) {
 			startActivity(new Intent(this, AppSettingsActivity.class));
 			return true;
 		}
-*/
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -264,9 +267,6 @@ public class MainActivity extends Activity {
 			// disable stop button on create
 			stop.setEnabled(false);
 
-			// set vibration
-			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
-
 			// animation for when countdown ends
 			final Animation anim = new AlphaAnimation(0.0f, 1.0f);
 			anim.setDuration(100);
@@ -302,7 +302,7 @@ public class MainActivity extends Activity {
 					stop.setEnabled(true);
 
 					// haptic feedback
-					myVib.vibrate(50);
+					vibrate();
 
 					// change colour of button text back when time is up
 					oneTime.postDelayed(new Runnable() {
@@ -425,8 +425,6 @@ public class MainActivity extends Activity {
 			reoccuring.setOnClickListener(new OnClickListener() {
 				long workLength;
 				long breakLeng;
-				long trigger;
-				long mBreak;
 
 				public void onClick(View v) {
 
@@ -439,20 +437,16 @@ public class MainActivity extends Activity {
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Notification set", Toast.LENGTH_LONG).show();
 
-					trigger = System.currentTimeMillis()
-							+ (Integer.parseInt(test) * 60 * 1000);
-
 					workLength = (long) (Integer.parseInt(test) * 60 * 1000);
 
 					breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
 					workBreak = workLength + breakLeng;
-					mBreak = workLength + workBreak;
 
 					recurringWorkAlarm();
 					recurringBreakAlarm();
 
 					// haptic feedback
-					myVib.vibrate(50);
+					vibrate();
 
 					// button disable
 					oneTime.setEnabled(false);
@@ -579,7 +573,7 @@ public class MainActivity extends Activity {
 					System.out.println("takeBreak = true");
 
 					// haptic feedback
-					myVib.vibrate(50);
+					vibrate();
 				}
 
 				private void setTextStop() {
@@ -619,6 +613,18 @@ public class MainActivity extends Activity {
 			// return View
 			return rootView;
 		}
+
+		protected void vibrate() {
+			// TODO Auto-generated method stub
+			// set vibration
+
+			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+			if (haptic) {
+				myVib.vibrate(50);
+			} else {
+				myVib.vibrate(0);
+			}
+		}
 	}
 
 	// Google Analytics
@@ -639,14 +645,22 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		/*if (scheduledRestart) {
-			scheduledRestart = false;
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(
-							getBaseContext().getPackageName());
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
-		}*/
+
+	}
+
+	// Apply theme
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		restartOnSwitch(this);
+	}
+
+	static void restartOnSwitch(Activity act) {
+		if (AppSettingsActivity.restart == true) {
+			Intent it = act.getIntent();
+			it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			act.startActivity(it);
+		}
 	}
 
 }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jeanielam.takeabreak.R;
 
-public class InfoActivity extends Activity  {
+public class InfoActivity extends Activity {
 	SharedPreferences sp;
 
 	@Override
@@ -20,26 +20,22 @@ public class InfoActivity extends Activity  {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info);
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
-	
+
 		loadPreferences();
 		TextView info = (TextView) findViewById(R.id.info);
 		TextView author = (TextView) findViewById(R.id.author);
 	}
 
 	private void loadPreferences() {
-		// TODO Auto-generated method stub
-		String appTheme = sp.getString("theme", "");
-		if (appTheme.equals("1")) {
-			setTheme(android.R.style.Theme_Holo_Light);
-		} else if (appTheme.equals("2")) {
-			setTheme(android.R.style.Theme_Holo);
-		}
+
 		String actionBarColourHex = sp.getString("action_bar_colour", "");
 		// Action bar
 		final ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
 				.parseColor(actionBarColourHex)));
+
+		String bgColourHex = sp.getString("bg_colour", "");
+		getWindow().getDecorView().setBackgroundColor(Color.parseColor(bgColourHex));
 	}
 
-	
 }

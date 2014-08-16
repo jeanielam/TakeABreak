@@ -7,22 +7,36 @@
     <PreferenceCategory
         android:key="Themes"
         android:title="Themes" >
-		<ListPreference
-		    android:defaultValue="Holo Light"
-		    android:entries="@array/theme"
-		    android:entryValues="@array/theme_id"
-		    android:key="theme"
-		    android:summary="Change theme of application"
-		    android:title="Application Theme"
-		    ></ListPreference>
+
         <ListPreference
             android:defaultValue="Light Blue"
             android:entries="@array/colours"
             android:entryValues="@array/colours_hex"
             android:key="action_bar_colour"
-            android:summary="WARNING: Application will be restarted to apply changes"
+            android:summary="Change the background colour of the top bar."
             android:title="Action Bar Colour" >
         </ListPreference>
+
+        <ListPreference
+            android:defaultValue="Pastel Gray"
+            android:entries="@array/bg_colours"
+            android:entryValues="@array/bg_colours_hex"
+            android:key="bg_colour"
+            android:summary="Change the background colour"
+            android:title="Background Colour" >
+        </ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="Misc"
+        android:title="Miscellaneous" >
+
+        <CheckBoxPreference
+            android:key="haptic_pref"
+            android:title="Haptic Feedback on Button Press"
+            android:summary="Enable"
+            android:defaultValue="false" >
+        </CheckBoxPreference>
     </PreferenceCategory>
 
 </PreferenceScreen>

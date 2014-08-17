@@ -9,20 +9,20 @@
         android:title="Themes" >
 
         <ListPreference
-            android:defaultValue="Light Blue"
+            android:defaultValue="#33B5E5"
             android:entries="@array/colours"
             android:entryValues="@array/colours_hex"
             android:key="action_bar_colour"
-            android:summary="Change the background colour of the top bar."
+            android:summary="Change the background colour of the top bar. \n \nWARNING: Application will restart and countdown timer will be restarted. Alarm will continually be set."
             android:title="Action Bar Colour" >
         </ListPreference>
 
         <ListPreference
-            android:defaultValue="Pastel Gray"
+            android:defaultValue="#FFFFFF"
             android:entries="@array/bg_colours"
             android:entryValues="@array/bg_colours_hex"
             android:key="bg_colour"
-            android:summary="Change the background colour"
+            android:summary="Change the background colour \n \nWARNING: Application will restart and countdown timer will be restarted. Alarm will continually be set."
             android:title="Background Colour" >
         </ListPreference>
     </PreferenceCategory>

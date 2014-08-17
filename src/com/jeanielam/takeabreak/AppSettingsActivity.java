@@ -19,8 +19,9 @@ public class AppSettingsActivity extends PreferenceActivity implements
 
 	public static SharedPreferences sp;
 	MainActivity ma;
-	static boolean restart;
-	
+
+	static boolean hasChanged;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class AppSettingsActivity extends PreferenceActivity implements
 
 	private void loadPreferences() {
 
-		String actionBarColourHex = sp.getString("action_bar_colour", "");
+		String actionBarColourHex = sp.getString("action_bar_colour", "#33B5E5");
 		// Action bar
 		final ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
@@ -44,20 +45,19 @@ public class AppSettingsActivity extends PreferenceActivity implements
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
 
-		String bgColourHex = sp.getString("bg_colour", "White");
-		getWindow().getDecorView().setBackgroundColor(Color.parseColor(bgColourHex));
+		String bgColourHex = sp.getString("bg_colour", "#FFFFFF");
+		getWindow().getDecorView().setBackgroundColor(
+				Color.parseColor(bgColourHex));
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-
+		hasChanged = true;
 		if (key.equals("action_bar_colour") | (key.equals("bg_colour"))) {
 			
 			restartActivity();
-			restart = true;
-		} else if (key.equals("haptic_pref")){
-			restart = true;
+
 		}
 	}
 

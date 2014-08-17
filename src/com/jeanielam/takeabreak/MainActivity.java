@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,17 +61,19 @@ public class MainActivity extends Activity {
 
 	public void loadPreferences() {
 
-		String actionBarColourHex = sp.getString("action_bar_colour", "");
+		String actionBarColourHex = sp.getString("action_bar_colour",
+				"#ff33B5E5");
+		System.out.println(actionBarColourHex);
 		// Action bar
 		final ActionBar actionBar = getActionBar();
 
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
 				.parseColor(actionBarColourHex)));
-
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
 
-		String bgColourHex = sp.getString("bg_colour", "White");
+		String bgColourHex = sp.getString("bg_colour", "#ffFFFFFF");
+		System.out.println(bgColourHex);
 		getWindow().getDecorView().setBackgroundColor(
 				Color.parseColor(bgColourHex));
 
@@ -656,11 +659,16 @@ public class MainActivity extends Activity {
 	}
 
 	static void restartOnSwitch(Activity act) {
-		if (AppSettingsActivity.restart == true) {
+		if (AppSettingsActivity.hasChanged == true) {
 			Intent it = act.getIntent();
 			it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			AppSettingsActivity.hasChanged = false;
 			act.startActivity(it);
 		}
 	}
-
+	/*
+	 * @Override public void onBackPressed() {
+	 * 
+	 * moveTaskToBack(true); }
+	 */
 }

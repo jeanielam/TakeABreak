@@ -22,19 +22,18 @@ public class InfoActivity extends Activity {
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 		loadPreferences();
-		TextView info = (TextView) findViewById(R.id.info);
-		TextView author = (TextView) findViewById(R.id.author);
+		
 	}
 
 	private void loadPreferences() {
 
-		String actionBarColourHex = sp.getString("action_bar_colour", "");
+		String actionBarColourHex = sp.getString("action_bar_colour", "#33B5E5");
 		// Action bar
 		final ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
 				.parseColor(actionBarColourHex)));
 
-		String bgColourHex = sp.getString("bg_colour", "");
+		String bgColourHex = sp.getString("bg_colour", "#FFFFFF");
 		getWindow().getDecorView().setBackgroundColor(Color.parseColor(bgColourHex));
 	}
 

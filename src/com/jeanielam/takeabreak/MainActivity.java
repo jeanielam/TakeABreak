@@ -9,8 +9,10 @@ import android.app.Fragment;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -133,6 +135,7 @@ public class MainActivity extends Activity {
 		protected CountDownTimer countDownTimer;
 		protected CountDownTimer countDownTimer1;
 		protected long workBreak;
+		NotificationManager notifManager;
 
 		public PlaceholderFragment() {
 		}
@@ -291,6 +294,14 @@ public class MainActivity extends Activity {
 					breakLeng = (long) (Integer.parseInt(breakLength) * 60 * 1000);
 					workBreak = length + breakLeng;
 
+					SharedPreferences pref = getActivity()
+							.getSharedPreferences("pref", 0);
+					SharedPreferences.Editor edit = pref.edit();
+
+					edit.putLong("length", length);
+					edit.putLong("breakLeng", breakLeng);
+					edit.commit();
+
 					alarmOneTimeWork();
 					alarmOneTimeBreak();
 
@@ -314,6 +325,15 @@ public class MainActivity extends Activity {
 							oneTime.setTextColor(Color.BLACK);
 							stop.setTextColor(Color.RED);
 							reoccuring.setEnabled(true);
+							notifManager.cancel(2);
+
+							AlarmManager am = (AlarmManager) getActivity()
+									.getSystemService(ALARM_SERVICE);
+							am.cancel(pintent2);
+							am.cancel(pintent);
+							
+							pintent.cancel();
+							pintent2.cancel();
 						}
 					}, workBreak);
 
@@ -461,7 +481,12 @@ public class MainActivity extends Activity {
 
 				private void recurringWorkAlarm() {
 					// work recurring
-
+					SharedPreferences pref = getActivity()
+							.getSharedPreferences("pref", 0);
+					SharedPreferences.Editor edit = pref.edit();
+					edit.putString("takeBreak", "true");
+					edit.commit();
+					System.out.println("takeBreak = true");
 					alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
 							System.currentTimeMillis() + workLength, workLength
 									+ breakLeng, pintent3);
@@ -577,6 +602,7 @@ public class MainActivity extends Activity {
 
 					// haptic feedback
 					vibrate();
+
 				}
 
 				private void setTextStop() {
@@ -605,10 +631,10 @@ public class MainActivity extends Activity {
 
 					am.cancel(pintent3);
 					am.cancel(pintent2);
-					am.cancel(pintent);
+					
 					pintent3.cancel();
 					pintent2.cancel();
-					pintent.cancel();
+					
 
 				}
 			});
@@ -618,7 +644,7 @@ public class MainActivity extends Activity {
 		}
 
 		protected void vibrate() {
-			// TODO Auto-generated method stub
+
 			// set vibration
 
 			myVib = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -646,6 +672,12 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	public void onDestroy() {
+
+		super.onDestroy();
+	}
+
+	@Override
 	public void onResume() {
 		super.onResume();
 
@@ -666,9 +698,17 @@ public class MainActivity extends Activity {
 			act.startActivity(it);
 		}
 	}
-	/*
-	 * @Override public void onBackPressed() {
-	 * 
-	 * moveTaskToBack(true); }
-	 */
+
+	@Override
+	public void onBackPressed() {
+
+		moveTaskToBack(true);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+	}
+
 }

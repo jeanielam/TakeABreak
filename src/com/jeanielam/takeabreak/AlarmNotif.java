@@ -41,7 +41,10 @@ public class AlarmNotif extends Service {
 		edit = pref.edit();
 		displayNotif();
 		changeVal();
+	
 	}
+
+	
 
 	private void changeVal() {
 
@@ -59,6 +62,7 @@ public class AlarmNotif extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
 	}
 
 	private void displayNotif() {

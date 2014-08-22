@@ -631,7 +631,8 @@ public class MainActivity extends Activity {
 
 					am.cancel(pintent3);
 					am.cancel(pintent2);
-					
+					am.cancel(pintent);
+					pintent.cancel();
 					pintent3.cancel();
 					pintent2.cancel();
 					
